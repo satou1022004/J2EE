@@ -1,0 +1,13 @@
+package com.example.btungdung;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class BtUngDungApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
