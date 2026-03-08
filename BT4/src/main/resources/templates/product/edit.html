@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit product</title>
+</head>
+<body>
+<div layout:fragment="content" class="container body-content">
+    <form th:action="@{/products/edit}" th:object="${product}"
+          method="post" enctype="multipart/form-data" style="max-width: 400px;">
+
+        <input type="hidden" th:field="*{id}">
+
+        <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input class="form-control" type="text" th:field="*{name}"
+                   id="name" placeholder="product Name">
+            <div class="alert alert-warning mt-1"
+                 th:if="${#fields.hasErrors('name')}"
+                 th:errors="*{name}"></div>
+        </div>
+
+        <div class="mb-3">
+            <label for="price" class="form-label">Price:</label>
+            <input class="form-control" type="number" th:field="*{price}"
+                   id="price">
+            <div class="alert alert-warning mt-1"
+                 th:if="${#fields.hasErrors('price')}"
+                 th:errors="*{price}"></div>
+        </div>
+
+        <div class="mb-3" th:if="${product.image != null and !#strings.isEmpty(product.image)}">
+            <label class="form-label">Current Image:</label><br>
+            <img th:src="@{/images/} + ${product.image}" height="80" alt="Current Image">
+        </div>
+
+        <div class="mb-3">
+            <label for="image" class="form-label">Image:</label>
+            <input class="form-control" type="file" id="image"
+                   name="imageProduct" accept="image/png,image/jpeg">
+        </div>
+
+        <div class="mb-3">
+            <label for="category" class="form-label">Category:</label>
+            <select name="category.id" class="form-control" id="category">
+                <option th:each="category : ${categories}"
+                        th:value="${category.id}"
+                        th:selected="${product.category != null and product.category.id == category.id}"
+                        th:text="${category.name}"></option>
+            </select>
+        </div>
+
+        <input type="submit" class="btn btn-success" value="Update Product">
+        <a th:href="@{/products}" class="btn btn-secondary ms-2">Cancel</a>
+    </form>
+</div>
+</body>
+</html>
