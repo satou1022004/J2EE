@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <title>Danh sách sản phẩm</title>
@@ -14,7 +15,9 @@
 </nav>
 
 <div class="container mt-3">
-    <a th:href="@{/products/add}" class="btn btn-primary mb-3">Create New Product</a>
+    <div sec:authorize="hasRole('ADMIN')">
+        <a th:href="@{/products/add}" class="btn btn-primary mb-3">Create New Product</a>
+    </div>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -38,8 +41,10 @@
             <td th:text="${product.price}"></td>
             <td th:text="${product.category != null} ? ${product.category.name} : ''"></td>
             <td>
-                <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-secondary">Edit</a>
-                <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a>
+                <div sec:authorize="hasRole('ADMIN')">
+                    <a th:href="@{/products/edit/{id}(id=${product.id})}" class="btn btn-secondary">Edit</a>
+                    <a th:href="@{/products/delete/{id}(id=${product.id})}" class="btn btn-danger">Delete</a>
+                </div>
             </td>
         </tr>
         </tbody>
