@@ -19,11 +19,11 @@ public class AccountService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Account account = accountRepository.findByLoginName(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
+        Account account = findByLoginName(username);
 
         Set<SimpleGrantedAuthority> authorities = account.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .map(role -> role.getName().startsWith("ROLE_") ? role.getName() : "ROLE_" + role.getName())
+                .map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toSet());
 
         return new org.springframework.security.core.userdetails.User(
@@ -31,5 +31,10 @@ public class AccountService implements UserDetailsService {
                 account.getPassword(),
                 authorities
         );
+    }
+
+    public Account findByLoginName(String username) {
+        return accountRepository.findByLoginName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Could not find user"));
     }
 }
